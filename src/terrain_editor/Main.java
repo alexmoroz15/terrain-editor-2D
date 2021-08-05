@@ -1,4 +1,4 @@
-package main.java.terrain_editor;
+package terrain_editor;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LongStringConverter;
-import main.java.terrain_editor.noisemap.FractalMap2D;
+import terrain_editor.noisemap.FractalMap2D;
 
 import javax.imageio.ImageIO;
 import java.io.File;

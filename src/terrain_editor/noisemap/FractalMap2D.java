@@ -1,4 +1,4 @@
-package main.java.terrain_editor.noisemap;
+package terrain_editor.noisemap;
 
 public class FractalMap2D extends NoiseMap2D {
 

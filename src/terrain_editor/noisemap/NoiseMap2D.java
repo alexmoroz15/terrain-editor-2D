@@ -1,4 +1,4 @@
-package main.java.terrain_editor.noisemap;
+package terrain_editor.noisemap;
 
 import java.util.ArrayList;
 import java.util.Random;

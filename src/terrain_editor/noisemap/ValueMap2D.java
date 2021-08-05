@@ -1,4 +1,4 @@
-package main.java.terrain_editor.noisemap;
+package terrain_editor.noisemap;
 
 
 // Based on https://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/
