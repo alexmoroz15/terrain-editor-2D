@@ -14,8 +14,7 @@ public class ValueMap2D extends NoiseMap2D {
         super(randomVals, frequency, interp);
     }
 
-    // Converts input x and y to the range [0.0, 256.0] using frequency.
-    // Returns a value interpolated from the 4 surrounding corners in randomVals.
+    @Override
     public double get(double x, double y) {
         x *= frequency;
         y *= frequency;

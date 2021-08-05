@@ -1,5 +1,8 @@
 package terrain_editor.noisemap;
 
+/*
+Simple 2D Fractal Map that uses Value Noise.
+ */
 public class FractalMap2D extends NoiseMap2D {
 
     private double lacunarity; // Rate at which frequency changes from layer to layer
@@ -51,6 +54,7 @@ public class FractalMap2D extends NoiseMap2D {
         return numLayers;
     }
 
+    @Override
     public double get(double x, double y) {
         double out = 0.0;
 
