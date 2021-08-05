@@ -109,7 +109,12 @@ public class Main extends Application {
         var seedChanger = CreateSeedChanger(0);
         var frequencyChanger = CreateFrequencyChanger(0);
 
-        options.getChildren().addAll(saveButton, seedChanger, frequencyChanger);
+        options.getChildren().addAll(
+                saveButton,
+                seedChanger,
+                frequencyChanger,
+                new ControlPane()
+        );
 
         return rightRegion;
     }
