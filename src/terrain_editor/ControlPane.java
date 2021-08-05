@@ -49,7 +49,7 @@ public class ControlPane extends VBox {
 
     public ControlPane() {
         seedField = new TextField();
-        seedField.setTextFormatter(createDoubleTextFormatter(25));
+        seedField.setTextFormatter(createLongTextFormatter(25));
         seedLabel = new Label("Seed: ");
         var seedHolder = new HBox(seedLabel, seedField);
 
