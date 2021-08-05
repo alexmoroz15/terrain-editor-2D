@@ -12,7 +12,6 @@ import javafx.util.converter.LongStringConverter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.function.UnaryOperator;
 
 public class ControlPane extends VBox {
     // Properties of the noise map
@@ -133,7 +132,7 @@ public class ControlPane extends VBox {
         return new TextFormatter<Double>(
                 new DoubleStringConverter(),
                 defaultVal,
-                (UnaryOperator<TextFormatter.Change>) change -> {
+                change -> {
                     if (change.getText().isEmpty()) {
                         return change;
                     }
