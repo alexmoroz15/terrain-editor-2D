@@ -1,16 +1,21 @@
 package terrain_editor.noisemap;
 
-
 // Based on https://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/
+
+/*
+Simple 2D Value Noise Map.
+ */
 public class ValueMap2D extends NoiseMap2D {
     public ValueMap2D(long seed, double frequency) {
         super(seed, frequency);
     }
 
-    public ValueMap2D(int[] randomVals, double frequency, InterpMethod interp) {
+    protected ValueMap2D(int[] randomVals, double frequency, InterpMethod interp) {
         super(randomVals, frequency, interp);
     }
 
+    // Converts input x and y to the range [0.0, 256.0] using frequency.
+    // Returns a value interpolated from the 4 surrounding corners in randomVals.
     public double get(double x, double y) {
         x *= frequency;
         y *= frequency;
