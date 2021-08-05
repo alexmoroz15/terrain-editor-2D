@@ -78,7 +78,7 @@ public class ControlPane extends VBox {
         colsField = new TextField();
         colsField.setTextFormatter(createIntTextFormatter(20));
         colsLabel = new Label("Number of Columns: ");
-        var colsHolder = new HBox(colsLabel, rowsField);
+        var colsHolder = new HBox(colsLabel, colsField);
 
         var gridPropsHolder = new VBox(rowsHolder, colsHolder);
 
