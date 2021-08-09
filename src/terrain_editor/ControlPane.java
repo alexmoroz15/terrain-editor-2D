@@ -1,10 +1,11 @@
 package terrain_editor;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -49,6 +50,7 @@ public class ControlPane extends VBox {
     public ControlPane() {
         seedField = new TextField();
         seedField.setTextFormatter(createLongTextFormatter(25));
+        seedField.setPrefColumnCount(20);
         seedLabel = new Label("Seed: ");
         var seedHolder = new HBox(seedLabel, seedField);
 
@@ -126,6 +128,12 @@ public class ControlPane extends VBox {
                 tilePropsHolder,
                 boundsHolder
         );
+        setBorder(new Border(new BorderStroke(
+                Color.BLACK,
+                BorderStrokeStyle.SOLID,
+                new CornerRadii(4.0),
+                new BorderWidths(2.0))));
+        setPadding(new Insets(4.0));
     }
 
     private TextFormatter<Double> createDoubleTextFormatter(double defaultVal) {
