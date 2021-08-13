@@ -43,7 +43,7 @@ public class ControlPane extends VBox {
     // Tiled image
     Button tileChooseButton;
 
-    Image tileImage;
+    ImageView tileImageView;
 
     // Define a range of amplitudes in [0.0, 1.0] where the tile image will be painted
     TextField minAmpField;
@@ -104,15 +104,18 @@ public class ControlPane extends VBox {
             var selectedFile = fileChooser.showOpenDialog(null);
             if (selectedFile != null) {
                 try {
-                    tileImage = new Image(new FileInputStream(selectedFile));
+                    //tileImage = new Image(new FileInputStream(selectedFile));
+                    tileImageView.setImage(new Image(new FileInputStream(selectedFile)));
                 } catch (FileNotFoundException e) {
                     System.out.println(e);
                 }
             }
         });
-        tileImage = new Image("/images/swamp_ground.png");
 
-        var tilePropsHolder = new HBox(tileChooseButton, new ImageView(tileImage));
+        var tileImage = new Image("/images/swamp_ground.png");
+        tileImageView = new ImageView(tileImage);
+
+        var tilePropsHolder = new HBox(tileChooseButton, tileImageView);
 
         minAmpField = new TextField();
         minAmpField.setTextFormatter(createDoubleTextFormatter(0.0));
