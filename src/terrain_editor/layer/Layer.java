@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import terrain_editor.ControlPane;
+import terrain_editor.FractalMapParams;
 import terrain_editor.noisemap.FractalMap2D;
 import terrain_editor.noisemap.NoiseMap2D;
 
@@ -98,21 +99,7 @@ public class Layer {
         redrawPreview.handle(noiseMap);
     }
 
-    public static class FractalMapParams {
-        public long seed;
-        public double frequency;
-        public double lacunarity;
-        public double gain;
-        public int numLayers;
 
-        public FractalMapParams() {
-            this.seed = 0;
-            this.frequency = 1.0;
-            this.lacunarity = 1.0;
-            this.gain = 1.0;
-            this.numLayers = 1;
-        }
-    }
 
     public static class PreviewPaneParams {
         public int numRows;
