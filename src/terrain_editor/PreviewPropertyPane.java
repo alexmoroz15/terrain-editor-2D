@@ -7,11 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import terrain_editor.layer.Layer;
-import terrain_editor.noisemap.NoiseMap2D;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

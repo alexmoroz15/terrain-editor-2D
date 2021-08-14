@@ -4,17 +4,11 @@ import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.LongStringConverter;
 import terrain_editor.layer.Layer;
-import terrain_editor.noisemap.FractalMap2D;
 
 import javax.imageio.ImageIO;
 import java.io.File;

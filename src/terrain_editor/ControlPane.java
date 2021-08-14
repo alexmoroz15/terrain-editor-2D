@@ -7,7 +7,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import terrain_editor.layer.Layer;
 import terrain_editor.noisemap.FractalMap2D;
-import terrain_editor.noisemap.NoiseMap2D;
 
 public class ControlPane extends VBox {
     PreviewPropertyPane previewPropertyPane;

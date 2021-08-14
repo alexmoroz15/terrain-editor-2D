@@ -7,7 +7,7 @@ import javafx.util.converter.LongStringConverter;
 
 public class PropertyPaneUtils {
     public static TextFormatter<Double> createDoubleTextFormatter(double defaultVal) {
-        return new TextFormatter<Double>(
+        return new TextFormatter<>(
                 new DoubleStringConverter(),
                 defaultVal,
                 change -> {
@@ -48,12 +48,6 @@ public class PropertyPaneUtils {
                 new IntegerStringConverter(),
                 defaultVal,
                 change -> {
-                    /*
-                    if (change.isDeleted()) {
-                        return change;
-                    }
-
-                     */
                     if (change.getText().isEmpty()) {
                         return change;
                     }
