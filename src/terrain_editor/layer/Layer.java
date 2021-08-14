@@ -31,11 +31,11 @@ public class Layer {
     Image previewImage;
     ImageView previewImageView; // Should be updated when noiseMap changes
 
-    int canvasWidth = 256;
-    int canvasHeight = 256;
+    final int canvasWidth = 256;
+    final int canvasHeight = 256;
 
     public Layer(FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams) {
-        this.noiseMap = new FractalMap2D(
+        noiseMap = new FractalMap2D(
                 fractalMapParams.seed,
                 fractalMapParams.frequency,
                 fractalMapParams.lacunarity,
@@ -43,7 +43,7 @@ public class Layer {
                 fractalMapParams.numLayers
         );
 
-        this.controlPane = new ControlPane(this.noiseMap);
+        controlPane = new ControlPane(this.noiseMap);
 
         NoiseMap2D.ChangeListener redrawPreview = newValue -> {
             // Get all values from noise map and the max value
@@ -94,6 +94,8 @@ public class Layer {
             previewImage = canvas.snapshot(sp, null);
             previewImageView.setImage(previewImage);
         };
+        noiseMap.addChangeListener(redrawPreview);
+        redrawPreview.handle(noiseMap);
     }
 
     public static class FractalMapParams {
