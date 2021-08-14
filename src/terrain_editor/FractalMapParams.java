@@ -9,7 +9,7 @@ public class FractalMapParams {
 
     public FractalMapParams() {
         this.seed = 0;
-        this.frequency = 1.0;
+        this.frequency = 1 / 20.0;
         this.lacunarity = 1.0;
         this.gain = 1.0;
         this.numLayers = 1;

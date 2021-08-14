@@ -6,8 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import terrain_editor.noisemap.FractalMap2D;
 
-import static terrain_editor.PropertyPaneUtils.createDoubleTextFormatter;
-import static terrain_editor.PropertyPaneUtils.createLongTextFormatter;
+import static terrain_editor.PropertyPaneUtils.*;
 
 public class MapPropertyPane extends VBox {
     public MapPropertyPane(FractalMap2D noiseMap) {
@@ -36,6 +35,12 @@ public class MapPropertyPane extends VBox {
         var gainLabel = new Label("Gain: ");
         var gainHolder = new HBox(gainLabel, gainField);
 
-        getChildren().addAll(seedHolder, freqHolder, lacHolder, gainHolder);
+        var numLayersField = new TextField();
+        numLayersField.setTextFormatter(createIntTextFormatter(noiseMap.getNumLayers()));
+        numLayersField.setOnAction(actionEvent -> noiseMap.setNumLayers((int) numLayersField.getTextFormatter().getValue()));
+        var numLayersLabel = new Label("Number of layers: ");
+        var numLayersHolder = new HBox(numLayersLabel, numLayersField);
+
+        getChildren().addAll(seedHolder, freqHolder, lacHolder, gainHolder, numLayersHolder);
     }
 }
