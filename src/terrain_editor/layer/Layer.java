@@ -37,6 +37,7 @@ public class Layer {
     final int canvasHeight = 256;
 
     public Layer(FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams) {
+        previewImageView = new ImageView();
         noiseMap = new FractalMap2D(
                 fractalMapParams.seed,
                 fractalMapParams.frequency,
@@ -98,5 +99,13 @@ public class Layer {
         };
         noiseMap.addChangeListener(redrawPreview);
         redrawPreview.handle(noiseMap);
+    }
+
+    public Image getPreviewImage() {
+        return previewImage;
+    }
+
+    public ControlPane getControlPane() {
+        return controlPane;
     }
 }
