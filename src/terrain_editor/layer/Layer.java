@@ -45,7 +45,7 @@ public class Layer {
                 fractalMapParams.numLayers
         );
 
-        controlPane = new ControlPane(this.noiseMap);
+        controlPane = new ControlPane(this.noiseMap, previewPaneParams);
 
         NoiseMap2D.ChangeListener redrawPreview = newValue -> {
             // Get all values from noise map and the max value

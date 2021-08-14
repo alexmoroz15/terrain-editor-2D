@@ -113,7 +113,7 @@ public class Main extends Application {
                 saveButton,
                 seedChanger,
                 frequencyChanger,
-                new ControlPane(new FractalMap2D(25, 1.0))
+                new ControlPane(new FractalMap2D(25, 1.0), new PreviewPaneParams())
         );
 
         return rightRegion;

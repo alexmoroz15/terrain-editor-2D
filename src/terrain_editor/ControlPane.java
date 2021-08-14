@@ -10,10 +10,10 @@ import terrain_editor.noisemap.FractalMap2D;
 public class ControlPane extends VBox {
     PreviewPropertyPane previewPropertyPane;
 
-    public ControlPane(FractalMap2D noiseMap) {
+    public ControlPane(FractalMap2D noiseMap, PreviewPaneParams previewPaneParams) {
 
         var mapPropertyPane = new MapPropertyPane(noiseMap);
-        previewPropertyPane = new PreviewPropertyPane();
+        previewPropertyPane = new PreviewPropertyPane(previewPaneParams);
 
         getChildren().addAll(
                 new Label("Layer 1"),

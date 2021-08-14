@@ -29,31 +29,31 @@ public class PreviewPropertyPane extends Pane {
     CheckBox minStrictBox;
     CheckBox maxStrictBox;
 
-    public PreviewPropertyPane() {
+    public PreviewPropertyPane(PreviewPaneParams previewPaneParams) {
         rowsField = new TextField();
-        rowsField.setTextFormatter(createIntTextFormatter(20));
+        rowsField.setTextFormatter(createIntTextFormatter(previewPaneParams.numRows));
         var rowsLabel = new Label("Number of Rows: ");
         var rowsHolder = new HBox(rowsLabel, rowsField);
 
         colsField = new TextField();
-        colsField.setTextFormatter(createIntTextFormatter(20));
+        colsField.setTextFormatter(createIntTextFormatter(previewPaneParams.numColumns));
         var colsLabel = new Label("Number of Columns: ");
         var colsHolder = new HBox(colsLabel, colsField);
 
         var gridPropsHolder = new VBox(rowsHolder, colsHolder);
 
         xOffsetField = new TextField();
-        xOffsetField.setTextFormatter(createDoubleTextFormatter(0.0));
+        xOffsetField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.xOffset));
         var xOffsetLabel = new Label("X Offset: ");
         var xOffsetHolder = new HBox(xOffsetLabel, xOffsetField);
 
         yOffsetField = new TextField();
-        yOffsetField.setTextFormatter(createDoubleTextFormatter(0.0));
+        yOffsetField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.yOffset));
         var yOffsetLabel = new Label("Y Offset: ");
         var yOffsetHolder = new HBox(yOffsetLabel, yOffsetField);
         var offsetHolder = new VBox(xOffsetHolder, yOffsetHolder);
 
-        tileImageView = new ImageView(new Image("/images/swamp_ground.png"));
+        tileImageView = new ImageView(previewPaneParams.tileImage);
         var tileChooseButton = new Button("Choose Image");
         tileChooseButton.setOnAction(actionEvent -> {
             var fileChooser = new FileChooser();
@@ -74,18 +74,18 @@ public class PreviewPropertyPane extends Pane {
         var tilePropsHolder = new HBox(tileChooseButton, tileImageView);
 
         minAmpField = new TextField();
-        minAmpField.setTextFormatter(createDoubleTextFormatter(0.0));
+        minAmpField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.minAmplitude));
         var minAmpLabel = new Label("Lower Bound: ");
         minStrictBox = new CheckBox("Strict lower bound");
-        minStrictBox.setSelected(false);
+        minStrictBox.setSelected(previewPaneParams.minStrict);
 
         var minAmpHolder = new HBox(minAmpLabel, minAmpField, minStrictBox);
 
         maxAmpField = new TextField();
-        maxAmpField.setTextFormatter(createDoubleTextFormatter(1.0));
+        maxAmpField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.maxAmplitude));
         var maxAmpLabel = new Label("Upper Bound: ");
         maxStrictBox = new CheckBox("Strict upper bound");
-        maxStrictBox.setSelected(false);
+        maxStrictBox.setSelected(previewPaneParams.maxStrict);
 
         var maxAmpHolder = new HBox(maxAmpLabel, maxAmpField, maxStrictBox);
 
