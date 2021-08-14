@@ -34,8 +34,8 @@ public class Layer {
     WritableImage previewImage;
     ImageView previewImageView; // Should be updated when noiseMap changes
 
-    final int canvasWidth = 256;
-    final int canvasHeight = 256;
+    final int canvasWidth = 64 * 20;
+    final int canvasHeight = 64 * 20;
 
     public Layer(int layerNum, FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams) {
         previewImageView = new ImageView();
