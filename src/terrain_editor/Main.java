@@ -26,6 +26,9 @@ public class Main extends Application {
     StackPane previewWindow;
     VBox optionsWindow;
 
+    final double canvasWidth = 320.0;
+    final double canvasHeight = 320.0;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -71,7 +74,7 @@ public class Main extends Application {
             System.out.println("Saving...");
 
             // Save the preview layer as a png. For testing.
-            var canvasComposite = new Canvas(320.0, 320.0);
+            var canvasComposite = new Canvas(canvasWidth, canvasHeight);
             var gc = canvasComposite.getGraphicsContext2D();
             for (var layer : layers) {
                 var image = layer.getPreviewImage();
@@ -118,6 +121,8 @@ public class Main extends Application {
         var ppp = new PreviewPaneParams();
         var layer = new Layer(layerCounter, fmp, ppp);
         layerCounter++;
+
+        layers.add(layer);
 
         var layerPreview = new Region();
         layerPreview.setBackground(new Background(new BackgroundImage(
