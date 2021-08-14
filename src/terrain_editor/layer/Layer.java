@@ -4,6 +4,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import terrain_editor.ControlPane;
 import terrain_editor.FractalMapParams;
@@ -30,7 +31,7 @@ public class Layer {
     ControlPane controlPane; // Controls noiseMap
     FractalMap2D noiseMap;
 
-    Image previewImage;
+    WritableImage previewImage;
     ImageView previewImageView; // Should be updated when noiseMap changes
 
     final int canvasWidth = 256;
@@ -38,6 +39,7 @@ public class Layer {
 
     public Layer(FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams) {
         previewImageView = new ImageView();
+        previewImage = new WritableImage(canvasWidth, canvasHeight);
         noiseMap = new FractalMap2D(
                 fractalMapParams.seed,
                 fractalMapParams.frequency,
@@ -102,7 +104,7 @@ public class Layer {
 
         var sp = new SnapshotParameters();
         sp.setFill(Color.TRANSPARENT);
-        previewImage = canvas.snapshot(sp, null);
+        canvas.snapshot(sp, previewImage);
         previewImageView.setImage(previewImage);
     }
 
