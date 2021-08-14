@@ -84,10 +84,10 @@ public class Layer {
                             (val < maxAmp || (val == maxAmp && !maxStrict))) {
 
                         gc.drawImage(controlPane.getTileImage(),
-                                col * canvasWidth / numCols,
-                                row * canvasHeight / numRows,
-                                canvasWidth / numCols,
-                                canvasHeight / numRows);
+                                col * canvasWidth / (double) numCols,
+                                row * canvasHeight / (double) numRows,
+                                canvasWidth / (double) numCols,
+                                canvasHeight / (double) numRows);
                     }
                 }
             }

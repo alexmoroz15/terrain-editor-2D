@@ -17,7 +17,7 @@ import java.io.FileNotFoundException;
 import static terrain_editor.PropertyPaneUtils.createDoubleTextFormatter;
 import static terrain_editor.PropertyPaneUtils.createIntTextFormatter;
 
-public class PreviewPropertyPane extends Pane {
+public class PreviewPropertyPane extends VBox {
     TextField rowsField;
     TextField colsField;
     TextField xOffsetField;
@@ -51,6 +51,7 @@ public class PreviewPropertyPane extends Pane {
         yOffsetField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.yOffset));
         var yOffsetLabel = new Label("Y Offset: ");
         var yOffsetHolder = new HBox(yOffsetLabel, yOffsetField);
+
         var offsetHolder = new VBox(xOffsetHolder, yOffsetHolder);
 
         tileImageView = new ImageView(previewPaneParams.tileImage);
