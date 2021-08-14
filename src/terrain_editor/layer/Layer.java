@@ -5,6 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import terrain_editor.ControlPane;
 import terrain_editor.FractalMapParams;
@@ -33,6 +34,7 @@ public class Layer {
 
     WritableImage previewImage;
     ImageView previewImageView; // Should be updated when noiseMap changes
+    Region previewRegion;
 
     final int canvasWidth = 64 * 20;
     final int canvasHeight = 64 * 20;
@@ -51,6 +53,22 @@ public class Layer {
         controlPane = new ControlPane(layerNum, this.noiseMap, previewPaneParams, this::redrawPreview);
         noiseMap.addChangeListener(this::redrawPreview);
         redrawPreview(noiseMap);
+
+        previewRegion = new Region();
+        previewRegion.setBackground(new Background(new BackgroundImage(
+                previewImage,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(
+                        BackgroundSize.AUTO,
+                        BackgroundSize.AUTO,
+                        false,
+                        false,
+                        true, // Make the image fit to the size of the region
+                        false
+                )
+        )));
     }
 
     private void redrawPreview() {
@@ -109,6 +127,10 @@ public class Layer {
 
     public Image getPreviewImage() {
         return previewImage;
+    }
+
+    public Region getPreviewRegion() {
+        return previewRegion;
     }
 
     public ControlPane getControlPane() {

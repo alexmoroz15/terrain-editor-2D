@@ -117,24 +117,7 @@ public class Main extends Application {
         layerCounter++;
 
         layers.add(layer);
-
-        var layerPreview = new Region();
-        layerPreview.setBackground(new Background(new BackgroundImage(
-                layer.getPreviewImage(),
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                new BackgroundSize(
-                        BackgroundSize.AUTO,
-                        BackgroundSize.AUTO,
-                        false,
-                        false,
-                        true, // Make the image fit to the size of the region
-                        false
-                )
-        )));
-        previewWindow.getChildren().add(layerPreview);
-
+        previewWindow.getChildren().add(layer.getPreviewRegion());
         optionsWindow.getChildren().add(layer.getControlPane());
     }
 }
