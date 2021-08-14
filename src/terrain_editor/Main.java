@@ -88,7 +88,10 @@ public class Main extends Application {
             }
         });
 
-        optionsWindow.getChildren().addAll(saveButton);
+        var addLayerButton = new Button("Add Layer");
+        addLayerButton.setOnAction(actionEvent -> addLayer());
+
+        optionsWindow.getChildren().addAll(saveButton, addLayerButton);
 
         return rightRegion;
     }
@@ -108,10 +111,13 @@ public class Main extends Application {
         return root;
     }
 
+    static int layerCounter = 0;
+
     private void addLayer() {
         var fmp = new FractalMapParams();
         var ppp = new PreviewPaneParams();
-        var layer = new Layer(fmp, ppp);
+        var layer = new Layer(layerCounter, fmp, ppp);
+        layerCounter++;
 
         var layerPreview = new Region();
         layerPreview.setBackground(new Background(new BackgroundImage(

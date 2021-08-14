@@ -12,13 +12,13 @@ import terrain_editor.noisemap.NoiseMap2D;
 public class ControlPane extends VBox {
     PreviewPropertyPane previewPropertyPane;
 
-    public ControlPane(FractalMap2D noiseMap, PreviewPaneParams previewPaneParams, Layer.ChangeCallback changeCallback) {
+    public ControlPane(int layerNum, FractalMap2D noiseMap, PreviewPaneParams previewPaneParams, Layer.ChangeCallback changeCallback) {
 
         var mapPropertyPane = new MapPropertyPane(noiseMap);
         previewPropertyPane = new PreviewPropertyPane(previewPaneParams, changeCallback);
 
         getChildren().addAll(
-                new Label("Layer 1"),
+                new Label("Layer " + layerNum),
                 mapPropertyPane,
                 previewPropertyPane
         );

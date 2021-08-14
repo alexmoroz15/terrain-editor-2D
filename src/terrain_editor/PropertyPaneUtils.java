@@ -48,11 +48,17 @@ public class PropertyPaneUtils {
                 new IntegerStringConverter(),
                 defaultVal,
                 change -> {
+                    /*
                     if (change.isDeleted()) {
                         return change;
                     }
+
+                     */
+                    if (change.getText().isEmpty()) {
+                        return change;
+                    }
                     try {
-                        Long.parseLong(change.getText());
+                        Integer.parseInt(change.getText());
                         return change;
                     } catch (NumberFormatException ex) {
                         return null;
