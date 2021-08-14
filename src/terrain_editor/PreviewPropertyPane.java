@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import terrain_editor.layer.Layer;
+import terrain_editor.noisemap.NoiseMap2D;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,14 +31,16 @@ public class PreviewPropertyPane extends VBox {
     CheckBox minStrictBox;
     CheckBox maxStrictBox;
 
-    public PreviewPropertyPane(PreviewPaneParams previewPaneParams) {
+    public PreviewPropertyPane(PreviewPaneParams previewPaneParams, Layer.ChangeCallback changeCallback) {
         rowsField = new TextField();
         rowsField.setTextFormatter(createIntTextFormatter(previewPaneParams.numRows));
+        rowsField.setOnAction(actionEvent -> changeCallback.callback());
         var rowsLabel = new Label("Number of Rows: ");
         var rowsHolder = new HBox(rowsLabel, rowsField);
 
         colsField = new TextField();
         colsField.setTextFormatter(createIntTextFormatter(previewPaneParams.numColumns));
+        colsField.setOnAction(actionEvent -> changeCallback.callback());
         var colsLabel = new Label("Number of Columns: ");
         var colsHolder = new HBox(colsLabel, colsField);
 
@@ -44,11 +48,13 @@ public class PreviewPropertyPane extends VBox {
 
         xOffsetField = new TextField();
         xOffsetField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.xOffset));
+        xOffsetField.setOnAction(actionEvent -> changeCallback.callback());
         var xOffsetLabel = new Label("X Offset: ");
         var xOffsetHolder = new HBox(xOffsetLabel, xOffsetField);
 
         yOffsetField = new TextField();
         yOffsetField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.yOffset));
+        yOffsetField.setOnAction(actionEvent -> changeCallback.callback());
         var yOffsetLabel = new Label("Y Offset: ");
         var yOffsetHolder = new HBox(yOffsetLabel, yOffsetField);
 
@@ -70,23 +76,28 @@ public class PreviewPropertyPane extends VBox {
                     System.out.println(e);
                 }
             }
+            changeCallback.callback();
         });
 
         var tilePropsHolder = new HBox(tileChooseButton, tileImageView);
 
         minAmpField = new TextField();
         minAmpField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.minAmplitude));
+        minAmpField.setOnAction(actionEvent -> changeCallback.callback());
         var minAmpLabel = new Label("Lower Bound: ");
         minStrictBox = new CheckBox("Strict lower bound");
         minStrictBox.setSelected(previewPaneParams.minStrict);
+        minStrictBox.setOnAction(actionEvent -> changeCallback.callback());
 
         var minAmpHolder = new HBox(minAmpLabel, minAmpField, minStrictBox);
 
         maxAmpField = new TextField();
         maxAmpField.setTextFormatter(createDoubleTextFormatter(previewPaneParams.maxAmplitude));
+        maxAmpField.setOnAction(actionEvent -> changeCallback.callback());
         var maxAmpLabel = new Label("Upper Bound: ");
         maxStrictBox = new CheckBox("Strict upper bound");
         maxStrictBox.setSelected(previewPaneParams.maxStrict);
+        maxStrictBox.setOnAction(actionEvent -> changeCallback.callback());
 
         var maxAmpHolder = new HBox(maxAmpLabel, maxAmpField, maxStrictBox);
 

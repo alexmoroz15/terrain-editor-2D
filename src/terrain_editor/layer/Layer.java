@@ -46,59 +46,64 @@ public class Layer {
                 fractalMapParams.numLayers
         );
 
-        controlPane = new ControlPane(this.noiseMap, previewPaneParams);
+        //NoiseMap2D.ChangeListener redrawPreview = this::redrawPreview;
+        controlPane = new ControlPane(this.noiseMap, previewPaneParams, this::redrawPreview);
+        noiseMap.addChangeListener(this::redrawPreview);
+        redrawPreview(noiseMap);
+    }
 
-        NoiseMap2D.ChangeListener redrawPreview = newValue -> {
-            // Get all values from noise map and the max value
-            var numRows = controlPane.getNumRows();
-            var numCols = controlPane.getNumColumns();
-            var vals = new double[numRows][numCols];
-            var maxVal = -Double.MAX_VALUE;
+    private void redrawPreview() {
+        redrawPreview(noiseMap);
+    }
 
-            var xOffset = controlPane.getXOffset();
-            var yOffset = controlPane.getYOffset();
+    private void redrawPreview(NoiseMap2D newValue) {
+        // Get all values from noise map and the max value
+        var numRows = controlPane.getNumRows();
+        var numCols = controlPane.getNumColumns();
+        var vals = new double[numRows][numCols];
+        var maxVal = -Double.MAX_VALUE;
 
-            for (int row = 0; row < vals.length; row++) {
-                for (int col = 0; col < vals[row].length; col++) {
-                    vals[row][col] = newValue.get(col + xOffset, row + yOffset);
-                    if (maxVal < vals[row][col]) {
-                        maxVal = vals[row][col];
-                    }
+        var xOffset = controlPane.getXOffset();
+        var yOffset = controlPane.getYOffset();
+
+        for (int row = 0; row < vals.length; row++) {
+            for (int col = 0; col < vals[row].length; col++) {
+                vals[row][col] = newValue.get(col + xOffset, row + yOffset);
+                if (maxVal < vals[row][col]) {
+                    maxVal = vals[row][col];
                 }
             }
+        }
 
-            // Draw to the canvas
-            var canvas = new Canvas(canvasWidth, canvasHeight);
-            var gc = canvas.getGraphicsContext2D();
-            for (int row = 0; row < vals.length; row++) {
-                for (int col = 0; col < vals[row].length; col++) {
-                    // Normalize val
-                    var val = vals[row][col] / maxVal;
+        // Draw to the canvas
+        var canvas = new Canvas(canvasWidth, canvasHeight);
+        var gc = canvas.getGraphicsContext2D();
+        for (int row = 0; row < vals.length; row++) {
+            for (int col = 0; col < vals[row].length; col++) {
+                // Normalize val
+                var val = vals[row][col] / maxVal;
 
-                    var minAmp = controlPane.getMinAmplitude();
-                    var maxAmp = controlPane.getMaxAmplitude();
-                    var minStrict = controlPane.getMinStrict();
-                    var maxStrict = controlPane.getMaxStrict();
+                var minAmp = controlPane.getMinAmplitude();
+                var maxAmp = controlPane.getMaxAmplitude();
+                var minStrict = controlPane.getMinStrict();
+                var maxStrict = controlPane.getMaxStrict();
 
-                    if ((val > minAmp || (val == minAmp && !minStrict)) &&
-                            (val < maxAmp || (val == maxAmp && !maxStrict))) {
+                if ((val > minAmp || (val == minAmp && !minStrict)) &&
+                        (val < maxAmp || (val == maxAmp && !maxStrict))) {
 
-                        gc.drawImage(controlPane.getTileImage(),
-                                col * canvasWidth / (double) numCols,
-                                row * canvasHeight / (double) numRows,
-                                canvasWidth / (double) numCols,
-                                canvasHeight / (double) numRows);
-                    }
+                    gc.drawImage(controlPane.getTileImage(),
+                            col * canvasWidth / (double) numCols,
+                            row * canvasHeight / (double) numRows,
+                            canvasWidth / (double) numCols,
+                            canvasHeight / (double) numRows);
                 }
             }
+        }
 
-            var sp = new SnapshotParameters();
-            sp.setFill(Color.TRANSPARENT);
-            previewImage = canvas.snapshot(sp, null);
-            previewImageView.setImage(previewImage);
-        };
-        noiseMap.addChangeListener(redrawPreview);
-        redrawPreview.handle(noiseMap);
+        var sp = new SnapshotParameters();
+        sp.setFill(Color.TRANSPARENT);
+        previewImage = canvas.snapshot(sp, null);
+        previewImageView.setImage(previewImage);
     }
 
     public Image getPreviewImage() {
@@ -107,5 +112,9 @@ public class Layer {
 
     public ControlPane getControlPane() {
         return controlPane;
+    }
+
+    public interface ChangeCallback {
+        void callback();
     }
 }

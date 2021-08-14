@@ -5,15 +5,17 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import terrain_editor.layer.Layer;
 import terrain_editor.noisemap.FractalMap2D;
+import terrain_editor.noisemap.NoiseMap2D;
 
 public class ControlPane extends VBox {
     PreviewPropertyPane previewPropertyPane;
 
-    public ControlPane(FractalMap2D noiseMap, PreviewPaneParams previewPaneParams) {
+    public ControlPane(FractalMap2D noiseMap, PreviewPaneParams previewPaneParams, Layer.ChangeCallback changeCallback) {
 
         var mapPropertyPane = new MapPropertyPane(noiseMap);
-        previewPropertyPane = new PreviewPropertyPane(previewPaneParams);
+        previewPropertyPane = new PreviewPropertyPane(previewPaneParams, changeCallback);
 
         getChildren().addAll(
                 new Label("Layer 1"),
