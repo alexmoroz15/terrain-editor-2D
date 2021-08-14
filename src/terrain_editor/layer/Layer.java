@@ -27,12 +27,14 @@ Each layer keeps track of:
 public class Layer {
     ControlPane controlPane; // Controls noiseMap
     FractalMap2D noiseMap;
-    ImageView previewImage; // Should be updated when noiseMap changes
+
+    Image previewImage;
+    ImageView previewImageView; // Should be updated when noiseMap changes
 
     int canvasWidth = 256;
     int canvasHeight = 256;
 
-    public Layer(FractalMapParams fractalMapParams, ControlPaneParams controlPaneParams) {
+    public Layer(FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams) {
         this.noiseMap = new FractalMap2D(
                 fractalMapParams.seed,
                 fractalMapParams.frequency,
@@ -44,36 +46,53 @@ public class Layer {
         this.controlPane = new ControlPane(this.noiseMap);
 
         NoiseMap2D.ChangeListener redrawPreview = newValue -> {
-            var canvas = new Canvas(canvasWidth, canvasHeight);
-            var gc = canvas.getGraphicsContext2D();
+            // Get all values from noise map and the max value
+            var numRows = controlPane.getNumRows();
+            var numCols = controlPane.getNumColumns();
+            var vals = new double[numRows][numCols];
+            var maxVal = -Double.MAX_VALUE;
 
+            var xOffset = controlPane.getXOffset();
+            var yOffset = controlPane.getYOffset();
 
-
-            var vals = new double[20][20];
-            double maxVal1 = -Double.MAX_VALUE;
-            for (int row = 0; row < vals1.length; row++) {
-                for (int col = 0; col < vals1[row].length; col++) {
-                    vals1[row][col] = newValue.get(col, row);
-                    if (maxVal1 < vals1[row][col]) {
-                        maxVal1 = vals1[row][col];
+            for (int row = 0; row < vals.length; row++) {
+                for (int col = 0; col < vals[row].length; col++) {
+                    vals[row][col] = newValue.get(col + xOffset, row + yOffset);
+                    if (maxVal < vals[row][col]) {
+                        maxVal = vals[row][col];
                     }
                 }
             }
 
-            var cv = layers.get(0);
-            var gc1 = cv.getGraphicsContext2D();
-            for (int row = 0; row < vals1.length; row++) {
-                for (int col = 0; col < vals1[row].length; col++) {
-                    // Normalize vals as we draw.
-                    vals1[row][col] /= maxVal1;
-                    gc1.setFill(new Color(vals1[row][col], 0.0, 0.0, 1.0));
-                    gc1.fillRect(col * 16.0, row * 16.0, 16.0, 16.0);
+            // Draw to the canvas
+            var canvas = new Canvas(canvasWidth, canvasHeight);
+            var gc = canvas.getGraphicsContext2D();
+            for (int row = 0; row < vals.length; row++) {
+                for (int col = 0; col < vals[row].length; col++) {
+                    // Normalize val
+                    var val = vals[row][col] / maxVal;
+
+                    var minAmp = controlPane.getMinAmplitude();
+                    var maxAmp = controlPane.getMaxAmplitude();
+                    var minStrict = controlPane.getMinStrict();
+                    var maxStrict = controlPane.getMaxStrict();
+
+                    if ((val > minAmp || (val == minAmp && !minStrict)) &&
+                            (val < maxAmp || (val == maxAmp && !maxStrict))) {
+
+                        gc.drawImage(controlPane.getTileImage(),
+                                col * canvasWidth / numCols,
+                                row * canvasHeight / numRows,
+                                canvasWidth / numCols,
+                                canvasHeight / numRows);
+                    }
                 }
             }
 
-            var sp1 = new SnapshotParameters();
-            sp1.setFill(Color.TRANSPARENT);
-            cv.snapshot(sp1, layerImages.get(0));
+            var sp = new SnapshotParameters();
+            sp.setFill(Color.TRANSPARENT);
+            previewImage = canvas.snapshot(sp, null);
+            previewImageView.setImage(previewImage);
         };
     }
 
@@ -93,7 +112,7 @@ public class Layer {
         }
     }
 
-    public static class ControlPaneParams {
+    public static class PreviewPaneParams {
         public int numRows;
         public int numColumns;
         public double xOffset;
@@ -104,7 +123,7 @@ public class Layer {
         public boolean minStrict;
         public boolean maxStrict;
 
-        public ControlPaneParams() {
+        public PreviewPaneParams() {
             this.numRows = 20;
             this.numColumns = 20;
             this.xOffset = 0.0;
