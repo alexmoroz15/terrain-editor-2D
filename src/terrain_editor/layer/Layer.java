@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import terrain_editor.ControlPane;
 import terrain_editor.FractalMapParams;
+import terrain_editor.PreviewPaneParams;
 import terrain_editor.noisemap.FractalMap2D;
 import terrain_editor.noisemap.NoiseMap2D;
 
@@ -97,31 +98,5 @@ public class Layer {
         };
         noiseMap.addChangeListener(redrawPreview);
         redrawPreview.handle(noiseMap);
-    }
-
-
-
-    public static class PreviewPaneParams {
-        public int numRows;
-        public int numColumns;
-        public double xOffset;
-        public double yOffset;
-        public Image tileImage;
-        public double minAmplitude;
-        public double maxAmplitude;
-        public boolean minStrict;
-        public boolean maxStrict;
-
-        public PreviewPaneParams() {
-            this.numRows = 20;
-            this.numColumns = 20;
-            this.xOffset = 0.0;
-            this.yOffset = 0.0;
-            this.tileImage = new Image("/images/swamp_ground.png");
-            this.minAmplitude = 0.0;
-            this.maxAmplitude = 1.0;
-            this.minStrict = false;
-            this.maxStrict = false;
-        }
     }
 }
