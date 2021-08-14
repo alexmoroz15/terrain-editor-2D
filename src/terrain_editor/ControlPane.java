@@ -21,11 +21,13 @@ public class ControlPane extends VBox {
     TextField freqField;
     TextField lacField;
     TextField gainField;
+    TextField numLayersField;
 
     Label seedLabel;
     Label freqLabel;
     Label lacLabel;
     Label gainLabel;
+    Label numLayersLabel;
 
     // Properties of the final image
     TextField rowsField;
@@ -56,26 +58,26 @@ public class ControlPane extends VBox {
 
     public ControlPane(FractalMap2D noiseMap) {
         seedField = new TextField();
-        seedField.setTextFormatter(createLongTextFormatter(25));
+        seedField.setTextFormatter(createLongTextFormatter(noiseMap.getSeed()));
         seedField.setOnAction(actionEvent -> noiseMap.setSeed((long) seedField.getTextFormatter().getValue()));
         seedField.setPrefColumnCount(20);
         seedLabel = new Label("Seed: ");
         var seedHolder = new HBox(seedLabel, seedField);
 
         freqField = new TextField();
-        freqField.setTextFormatter(createDoubleTextFormatter(1.0));
+        freqField.setTextFormatter(createDoubleTextFormatter(noiseMap.getFrequency()));
         freqField.setOnAction(actionEvent -> noiseMap.setFrequency((double) freqField.getTextFormatter().getValue()));
         freqLabel = new Label("Frequency: ");
         var freqHolder = new HBox(freqLabel, freqField);
 
         lacField = new TextField();
-        lacField.setTextFormatter(createDoubleTextFormatter(0.5));
+        lacField.setTextFormatter(createDoubleTextFormatter(noiseMap.getLacunarity()));
         lacField.setOnAction(actionEvent -> noiseMap.setLacunarity((double) lacField.getTextFormatter().getValue()));
         lacLabel = new Label("Lacunarity: ");
         var lacHolder = new HBox(lacLabel, lacField);
 
         gainField = new TextField();
-        gainField.setTextFormatter(createDoubleTextFormatter(0.5));
+        gainField.setTextFormatter(createDoubleTextFormatter(noiseMap.getGain()));
         gainField.setOnAction(actionEvent -> noiseMap.setGain((double) gainField.getTextFormatter().getValue()));
         gainLabel = new Label("Gain: ");
         var gainHolder = new HBox(gainLabel, gainField);
