@@ -177,20 +177,13 @@ public class Main extends Application {
 
         LinearMoveDirection previewDirection = LinearMoveDirection.FORWARD;
         LinearMoveDirection optionsDirection = LinearMoveDirection.BACKWARD;
-        switch (direction) {
-            case UP:
-                previewDirection = LinearMoveDirection.FORWARD;
-                optionsDirection = LinearMoveDirection.BACKWARD;
-                break;
-            case DOWN:
+        if (direction == MoveLayerDirection.DOWN) {
                 previewDirection = LinearMoveDirection.BACKWARD;
                 optionsDirection = LinearMoveDirection.FORWARD;
-                break;
         }
-        var result = false;
 
         var previewWindowArray = previewWindow.getChildren().toArray();
-        result = arraySwap(previewWindowArray, layer.getPreviewRegion(), previewDirection);
+        var result = arraySwap(previewWindowArray, layer.getPreviewRegion(), previewDirection);
         if (!result) {
             return false;
         }
