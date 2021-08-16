@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main extends Application {
     private ArrayList<Layer> layers;
@@ -168,7 +169,7 @@ public class Main extends Application {
         DOWN
     }
 
-    // Return true if the layer can still move up/down
+    // Return true if the layer can still move up/down after moving
     private boolean moveLayer(Layer layer, MoveLayerDirection direction) {
         // So the layer needs to be moved in 3 places:
         // - previewWindow (ObservableList<Node>)
@@ -182,6 +183,7 @@ public class Main extends Application {
                 optionsDirection = LinearMoveDirection.FORWARD;
         }
 
+        /*
         var previewWindowArray = previewWindow.getChildren().toArray();
         var result = arraySwap(previewWindowArray, layer.getPreviewRegion(), previewDirection);
         if (!result) {
@@ -205,6 +207,20 @@ public class Main extends Application {
         }
         layersWindow.getChildren().setAll((Node[]) layersWindowArray);
         return true;
+
+         */
+
+        var result1 = listSwap(previewWindow.getChildren().stream().map(node -> (Object) node).collect(Collectors.toList()),
+                layer.getPreviewRegion(),
+                previewDirection);
+        var result2 = listSwap(layers.stream().map(node -> (Object) node).collect(Collectors.toList()),
+                layer,
+                previewDirection);
+        var result3 = listSwap(layersWindow.getChildren().stream().map(node -> (Object) node).collect(Collectors.toList()),
+                layer.getControlPane(),
+                optionsDirection);
+        assert result1 == result2 && result2 == result3;
+        return result1 && result2 && result3;
     }
 
     private enum LinearMoveDirection {
@@ -212,6 +228,7 @@ public class Main extends Application {
         BACKWARD
     }
 
+    /*
     private boolean arraySwap(Object[] a, Object o, LinearMoveDirection direction) {
         if (a.length <= 1) {
             return false;
@@ -235,6 +252,42 @@ public class Main extends Application {
                 a[i] = a[i + swapOffset];
                 a[i + swapOffset] = temp;
                 return true;
+            }
+        }
+        return false;
+    }
+
+     */
+
+    private boolean listSwap(List<Object> l, Object o, LinearMoveDirection direction) {
+        if (l.size() <= 1) {
+            return false;
+        }
+        if ((l.get(0) == o && direction == LinearMoveDirection.BACKWARD) ||
+                (l.get(l.size() - 1) == o && direction == LinearMoveDirection.FORWARD)) {
+            return false;
+        }
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i) == o) {
+                int swapOffset = 0;
+                switch (direction) {
+                    case FORWARD:
+                        swapOffset = 1;
+                        break;
+                    case BACKWARD:
+                        swapOffset = -1;
+                        break;
+                }
+                var temp = l.get(i);
+                l.set(i, l.get(i + swapOffset));
+                l.set(i + swapOffset, temp);
+                switch (direction) {
+                    case FORWARD:
+                        return i + swapOffset < l.size() - 1;
+                    case BACKWARD:
+                        return i + swapOffset > 1;
+                }
+                return false;
             }
         }
         return false;
