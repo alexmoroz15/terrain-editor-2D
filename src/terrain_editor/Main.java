@@ -160,7 +160,30 @@ public class Main extends Application {
         void move(Layer layer, MoveLayerDirection direction);
     }
 
-    private void moveLayerUp(Layer layer, MoveLayerDirection direction) {
+    private boolean canMoveLayer(Layer layer, MoveLayerDirection direction) {
+        var regionList = previewWindow.getChildren();
+        var regionArray = regionList.toArray();
+        switch (direction) {
+            case UP:
+                for (int i = 0; i < regionArray.length - 1; i++) {
+                    if (regionArray[i] == layer.getPreviewRegion()) {
+                        return true;
+                    }
+                }
+                break;
+            case DOWN:
+                for (int i = 1; i < regionArray.length; i++) {
+                    if (regionArray[i] == layer.getPreviewRegion()) {
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
+    }
+
+    // Return true if the layer can still move up/down
+    private boolean moveLayer(Layer layer, MoveLayerDirection direction) {
         // I don't know how to do stream-fu, so I'll cheat by using arrays.
         var regionList = previewWindow.getChildren();
         var regionArray = regionList.toArray();
@@ -168,28 +191,42 @@ public class Main extends Application {
 
         int lbound = 0;
         int hbound = regionArray.length;
-        switch (direction) {
+        int swapOffset = 0;
+
+        switch(direction) {
             case UP:
                 hbound--;
+                swapOffset = 1;
                 break;
             case DOWN:
                 lbound++;
+                swapOffset = -1;
                 break;
         }
 
         for (int i = lbound; i < hbound; i++) {
             if (regionArray[i] == layer.getPreviewRegion()) {
                 var temp = regionArray[i];
-                regionArray[i] = regionArray[i + 1];
-                regionArray[i + 1] = temp;
+                regionArray[i] = regionArray[i + swapOffset];
+                regionArray[i + swapOffset] = temp;
 
                 regionList.addAll((Node[]) regionArray);
-                assert true;
+                return canMoveLayer(regionArray, i + swapOffset, direction);
             }
         }
+
         regionList.addAll((Node[]) regionArray);
         assert false;
+        return false;
     }
 
-
+    private boolean canMoveLayer(Object[] array, int index, MoveLayerDirection direction) {
+        switch(direction) {
+            case UP:
+                return index > 1;
+            case DOWN:
+                return index < array.length - 1;
+        }
+        return false;
+    }
 }
