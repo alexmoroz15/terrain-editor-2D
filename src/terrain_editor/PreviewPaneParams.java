@@ -20,7 +20,7 @@ public class PreviewPaneParams {
         this.yOffset = 0.0;
         this.tileImage = new Image("/images/swamp_ground.png");
         this.minAmplitude = 0.0;
-        this.maxAmplitude = 1.0;
+        this.maxAmplitude = 0.5;
         this.minStrict = false;
         this.maxStrict = false;
     }

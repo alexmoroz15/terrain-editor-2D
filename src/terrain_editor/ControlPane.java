@@ -16,8 +16,14 @@ public class ControlPane extends VBox {
         var mapPropertyPane = new MapPropertyPane(noiseMap);
         previewPropertyPane = new PreviewPropertyPane(previewPaneParams, changeCallback);
 
+        var deleteButton = new Button("Delete Layer");
+        deleteButton.setOnAction(actionEvent -> {
+            System.out.println("Layer deletion not currently supported.");
+        });
+
         getChildren().addAll(
                 new Label("Layer " + layerNum),
+                deleteButton,
                 mapPropertyPane,
                 previewPropertyPane
         );
