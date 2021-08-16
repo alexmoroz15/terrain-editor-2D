@@ -113,11 +113,25 @@ public class Main extends Application {
     private void addLayer() {
         var fmp = new FractalMapParams();
         var ppp = new PreviewPaneParams();
-        var layer = new Layer(layerCounter, fmp, ppp);
+        var layer = new Layer(layerCounter, fmp, ppp, this::removeLayer);
         layerCounter++;
 
         layers.add(layer);
         previewWindow.getChildren().add(layer.getPreviewRegion());
         optionsWindow.getChildren().add(layer.getControlPane());
+    }
+
+    public interface RemoveLayerCallback {
+        void removeLayer(Layer layer);
+    }
+
+    private void removeLayer(Layer layer) {
+        var previewDeleted = previewWindow.getChildren().remove(layer.getPreviewRegion());
+        var controlDeleted = optionsWindow.getChildren().remove(layer.getControlPane());
+        var layerDeleted = layers.remove(layer);
+
+        assert previewDeleted;
+        assert controlDeleted;
+        assert layerDeleted;
     }
 }

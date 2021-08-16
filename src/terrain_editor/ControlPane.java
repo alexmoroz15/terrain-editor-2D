@@ -11,15 +11,13 @@ import terrain_editor.noisemap.FractalMap2D;
 public class ControlPane extends VBox {
     PreviewPropertyPane previewPropertyPane;
 
-    public ControlPane(int layerNum, FractalMap2D noiseMap, PreviewPaneParams previewPaneParams, Layer.ChangeCallback changeCallback) {
+    public ControlPane(int layerNum, FractalMap2D noiseMap, PreviewPaneParams previewPaneParams, Layer.ChangeCallback changeCallback, Callback removeLayerCallback) {
 
         var mapPropertyPane = new MapPropertyPane(noiseMap);
         previewPropertyPane = new PreviewPropertyPane(previewPaneParams, changeCallback);
 
         var deleteButton = new Button("Delete Layer");
-        deleteButton.setOnAction(actionEvent -> {
-            System.out.println("Layer deletion not currently supported.");
-        });
+        deleteButton.setOnAction(actionEvent -> removeLayerCallback.callback());
 
         getChildren().addAll(
                 new Label("Layer " + layerNum),

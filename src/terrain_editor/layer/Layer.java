@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import terrain_editor.ControlPane;
 import terrain_editor.FractalMapParams;
+import terrain_editor.Main;
 import terrain_editor.PreviewPaneParams;
 import terrain_editor.noisemap.FractalMap2D;
 import terrain_editor.noisemap.NoiseMap2D;
@@ -39,7 +40,7 @@ public class Layer {
     final int canvasWidth = 64 * 20;
     final int canvasHeight = 64 * 20;
 
-    public Layer(int layerNum, FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams) {
+    public Layer(int layerNum, FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams, Main.RemoveLayerCallback removeLayerCallback) {
         previewImageView = new ImageView();
         previewImage = new WritableImage(canvasWidth, canvasHeight);
         noiseMap = new FractalMap2D(
@@ -50,7 +51,11 @@ public class Layer {
                 fractalMapParams.numLayers
         );
 
-        controlPane = new ControlPane(layerNum, this.noiseMap, previewPaneParams, this::redrawPreview);
+        controlPane = new ControlPane(layerNum,
+                this.noiseMap,
+                previewPaneParams,
+                this::redrawPreview,
+                () -> removeLayerCallback.removeLayer(this));
         noiseMap.addChangeListener(this::redrawPreview);
         redrawPreview(noiseMap);
 
