@@ -187,17 +187,22 @@ public class Main extends Application {
                 optionsDirection = LinearMoveDirection.FORWARD;
         }
 
-        var result1 = listSwap(previewWindow.getChildren().stream().map(node -> (Object) node).collect(Collectors.toList()),
-                layer.getPreviewRegion(),
-                previewDirection);
-        var result2 = listSwap(layers.stream().map(node -> (Object) node).collect(Collectors.toList()),
-                layer,
-                previewDirection);
-        var result3 = listSwap(layersWindow.getChildren().stream().map(node -> (Object) node).collect(Collectors.toList()),
-                layer.getControlPane(),
-                optionsDirection);
+        var previewWindowArray = previewWindow.getChildren().toArray();
+        var result1 = arraySwap(previewWindowArray, layer.getPreviewRegion(), previewDirection);
+        previewWindow.getChildren().setAll((Node[]) previewWindowArray);
+
+        // There's gotta be a better and more efficient way to do this, but screw it.
+        var layersArray = layers.toArray();
+        var result2 = arraySwap(layersArray, layer, previewDirection);
+        layers.clear();
+        layers.addAll(Arrays.asList((Layer[]) layersArray));
+
+        var layersWindowArray = layersWindow.getChildren().toArray();
+        var result3 = arraySwap(layersWindowArray, layer.getControlPane(), optionsDirection);
+        layersWindow.getChildren().setAll((Node[]) layersWindowArray);
+
         assert result1 == result2 && result2 == result3;
-        return result1 && result2 && result3;
+        return result1;
     }
 
     private enum LinearMoveDirection {
@@ -205,17 +210,16 @@ public class Main extends Application {
         BACKWARD
     }
 
-    // returns true if the object can be swapped with the next element in the given direction again.
-    private boolean listSwap(List<Object> l, Object o, LinearMoveDirection direction) {
-        if (l.size() <= 1) {
+    private boolean arraySwap(Object[] a, Object o, LinearMoveDirection direction) {
+        if (a.length <= 1) {
             return false;
         }
-        if ((l.get(0) == o && direction == LinearMoveDirection.BACKWARD) ||
-                (l.get(l.size() - 1) == o && direction == LinearMoveDirection.FORWARD)) {
+        if ((a[0] == o && direction == LinearMoveDirection.BACKWARD) ||
+                (a[a.length - 1] == o && direction == LinearMoveDirection.FORWARD)) {
             return false;
         }
-        for (int i = 0; i < l.size(); i++) {
-            if (l.get(i) == o) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == o) {
                 int swapOffset = 0;
                 switch (direction) {
                     case FORWARD:
@@ -225,16 +229,10 @@ public class Main extends Application {
                         swapOffset = -1;
                         break;
                 }
-                var temp = l.get(i);
-                l.set(i, l.get(i + swapOffset));
-                l.set(i + swapOffset, temp);
-                switch (direction) {
-                    case FORWARD:
-                        return i + swapOffset < l.size() - 1;
-                    case BACKWARD:
-                        return i + swapOffset > 0;
-                }
-                return false;
+                var temp = a[i];
+                a[i] = a[i + swapOffset];
+                a[i + swapOffset] = temp;
+                return true;
             }
         }
         return false;
