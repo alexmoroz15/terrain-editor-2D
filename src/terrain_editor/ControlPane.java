@@ -11,7 +11,12 @@ import terrain_editor.noisemap.FractalMap2D;
 public class ControlPane extends VBox {
     PreviewPropertyPane previewPropertyPane;
 
-    public ControlPane(int layerNum, FractalMap2D noiseMap, PreviewPaneParams previewPaneParams, Layer.ChangeCallback changeCallback, Callback removeLayerCallback) {
+    public ControlPane(int layerNum,
+                       FractalMap2D noiseMap,
+                       PreviewPaneParams previewPaneParams,
+                       Layer.ChangeCallback changeCallback,
+                       Callback removeLayerCallback,
+                       TypedCallback<Boolean> setVisibleCallback) {
 
         var mapPropertyPane = new MapPropertyPane(noiseMap);
         previewPropertyPane = new PreviewPropertyPane(previewPaneParams, changeCallback);
@@ -19,8 +24,13 @@ public class ControlPane extends VBox {
         var deleteButton = new Button("Delete Layer");
         deleteButton.setOnAction(actionEvent -> removeLayerCallback.callback());
 
+        var visibleToggle = new CheckBox("Visible");
+        visibleToggle.setSelected(true);
+        visibleToggle.setOnAction(actionEvent -> setVisibleCallback.callback(visibleToggle.isSelected()));
+
         getChildren().addAll(
                 new Label("Layer " + layerNum),
+                visibleToggle,
                 deleteButton,
                 mapPropertyPane,
                 previewPropertyPane

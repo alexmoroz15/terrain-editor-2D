@@ -40,7 +40,11 @@ public class Layer {
     final int canvasWidth = 64 * 20;
     final int canvasHeight = 64 * 20;
 
-    public Layer(int layerNum, FractalMapParams fractalMapParams, PreviewPaneParams previewPaneParams, Main.RemoveLayerCallback removeLayerCallback) {
+    public Layer(int layerNum,
+                 FractalMapParams fractalMapParams,
+                 PreviewPaneParams previewPaneParams,
+                 Main.RemoveLayerCallback removeLayerCallback,
+                 Main.SetVisibleCallback setVisibleCallback) {
         previewImageView = new ImageView();
         previewImage = new WritableImage(canvasWidth, canvasHeight);
         noiseMap = new FractalMap2D(
@@ -55,7 +59,8 @@ public class Layer {
                 this.noiseMap,
                 previewPaneParams,
                 this::redrawPreview,
-                () -> removeLayerCallback.removeLayer(this));
+                () -> removeLayerCallback.removeLayer(this),
+                visible -> setVisibleCallback.setVisible(this, visible));
         noiseMap.addChangeListener(this::redrawPreview);
         redrawPreview(noiseMap);
 

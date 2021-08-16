@@ -71,8 +71,11 @@ public class Main extends Application {
             var canvasComposite = new Canvas(canvasWidth, canvasHeight);
             var gc = canvasComposite.getGraphicsContext2D();
             for (var layer : layers) {
-                var image = layer.getPreviewImage();
-                gc.drawImage(image, 0.0, 0.0, 320.0, 320.0);
+                var imageRegion = layer.getPreviewRegion();
+                if (imageRegion.isVisible()) {
+                    var image = layer.getPreviewImage();
+                    gc.drawImage(image, 0.0, 0.0, 320.0, 320.0);
+                }
             }
             var wi = canvasComposite.snapshot(null, null);
             var file = new File("snapshot.png");
@@ -113,7 +116,7 @@ public class Main extends Application {
     private void addLayer() {
         var fmp = new FractalMapParams();
         var ppp = new PreviewPaneParams();
-        var layer = new Layer(layerCounter, fmp, ppp, this::removeLayer);
+        var layer = new Layer(layerCounter, fmp, ppp, this::removeLayer, this::setVisible);
         layerCounter++;
 
         layers.add(layer);
@@ -133,5 +136,13 @@ public class Main extends Application {
         assert previewDeleted;
         assert controlDeleted;
         assert layerDeleted;
+    }
+
+    public interface SetVisibleCallback {
+        void setVisible(Layer layer, boolean visible);
+    }
+
+    private void setVisible(Layer layer, boolean visible) {
+        layer.getPreviewRegion().setVisible(visible);
     }
 }
