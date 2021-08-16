@@ -16,7 +16,8 @@ public class ControlPane extends VBox {
                        PreviewPaneParams previewPaneParams,
                        Layer.ChangeCallback changeCallback,
                        Callback removeLayerCallback,
-                       TypedCallback<Boolean> setVisibleCallback) {
+                       TypedCallback<Boolean> setVisibleCallback,
+                       Layer.MoveThisLayerCallback moveLayerCallback) {
 
         var mapPropertyPane = new MapPropertyPane(noiseMap);
         previewPropertyPane = new PreviewPropertyPane(previewPaneParams, changeCallback);
@@ -27,6 +28,11 @@ public class ControlPane extends VBox {
         var visibleToggle = new CheckBox("Visible");
         visibleToggle.setSelected(true);
         visibleToggle.setOnAction(actionEvent -> setVisibleCallback.callback(visibleToggle.isSelected()));
+
+        var moveLayerUpButton = new Button("Move layer up");
+        moveLayerUpButton.setOnAction(actionEvent -> moveLayerCallback.move(Main.MoveLayerDirection.UP));
+        var moveLayerDownButton = new Button("Move layer down");
+        moveLayerDownButton.setOnAction(actionEvent -> moveLayerCallback.move(Main.MoveLayerDirection.DOWN));
 
         getChildren().addAll(
                 new Label("Layer " + layerNum),

@@ -121,7 +121,7 @@ public class Main extends Application {
     private void addLayer() {
         var fmp = new FractalMapParams();
         var ppp = new PreviewPaneParams();
-        var layer = new Layer(layerCounter, fmp, ppp, this::removeLayer, this::setVisible);
+        var layer = new Layer(layerCounter, fmp, ppp, this::removeLayer, this::setVisible, this::moveLayer);
         layerCounter++;
 
         layers.add(layer);
@@ -167,6 +167,10 @@ public class Main extends Application {
     public enum MoveLayerDirection {
         UP,
         DOWN
+    }
+
+    public interface MoveLayerCallback {
+        boolean move(Layer layer, MoveLayerDirection direction);
     }
 
     // Return true if the layer can still move up/down after moving
