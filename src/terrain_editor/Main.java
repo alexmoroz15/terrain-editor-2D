@@ -232,7 +232,7 @@ public class Main extends Application {
                     case FORWARD:
                         return i + swapOffset < l.size() - 1;
                     case BACKWARD:
-                        return i + swapOffset > 1;
+                        return i + swapOffset > 0;
                 }
                 return false;
             }

@@ -38,6 +38,8 @@ public class ControlPane extends VBox {
                 new Label("Layer " + layerNum),
                 visibleToggle,
                 deleteButton,
+                moveLayerUpButton,
+                moveLayerDownButton,
                 mapPropertyPane,
                 previewPropertyPane
         );
