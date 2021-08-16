@@ -15,10 +15,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class Main extends Application {
     private ArrayList<Layer> layers;
@@ -125,8 +122,16 @@ public class Main extends Application {
         layerCounter++;
 
         layers.add(layer);
-        previewWindow.getChildren().add(layer.getPreviewRegion());
-        optionsWindow.getChildren().add(layer.getControlPane());
+
+        var previewChildren = previewWindow.getChildren();
+        var previewChildrenList = new LinkedList<Node>(previewChildren);
+        previewChildrenList.addFirst(layer.getPreviewRegion());
+        previewChildren.setAll(previewChildrenList);
+
+        var optionsChildren = optionsWindow.getChildren();
+        var optionsChildrenList = new LinkedList<Node>(optionsChildren);
+        optionsChildrenList.addFirst(layer.getPreviewRegion());
+        optionsChildren.setAll(optionsChildrenList);
     }
 
     public interface RemoveLayerCallback {
@@ -187,7 +192,7 @@ public class Main extends Application {
         // I don't know how to do stream-fu, so I'll cheat by using arrays.
         var regionList = previewWindow.getChildren();
         var regionArray = regionList.toArray();
-        regionList.clear();
+        //regionList.clear();
 
         int lbound = 0;
         int hbound = regionArray.length;
@@ -210,12 +215,11 @@ public class Main extends Application {
                 regionArray[i] = regionArray[i + swapOffset];
                 regionArray[i + swapOffset] = temp;
 
-                regionList.addAll((Node[]) regionArray);
+                regionList.setAll((Node[]) regionArray);
                 return canMoveLayer(regionArray, i + swapOffset, direction);
             }
         }
 
-        regionList.addAll((Node[]) regionArray);
         assert false;
         return false;
     }
