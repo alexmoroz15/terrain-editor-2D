@@ -20,7 +20,7 @@ import java.util.*;
 public class Main extends Application {
     private ArrayList<Layer> layers;
     StackPane previewWindow;
-    VBox optionsWindow;
+    VBox layersWindow;
 
     final double canvasWidth = 320.0;
     final double canvasHeight = 320.0;
@@ -61,8 +61,9 @@ public class Main extends Application {
     private Parent CreateRightRegion() {
         var rightRegion = new ScrollPane();
         //var options = new VBox();
-        optionsWindow = new VBox();
-        rightRegion.setContent(optionsWindow);
+        var settings = new VBox();
+        layersWindow = new VBox();
+        rightRegion.setContent(settings);
 
         // Populate the options pane
         Button saveButton = new Button("Save png");
@@ -93,7 +94,7 @@ public class Main extends Application {
         var addLayerButton = new Button("Add Layer");
         addLayerButton.setOnAction(actionEvent -> addLayer());
 
-        optionsWindow.getChildren().addAll(saveButton, addLayerButton);
+        settings.getChildren().addAll(saveButton, addLayerButton, layersWindow);
 
         return rightRegion;
     }
@@ -121,16 +122,21 @@ public class Main extends Application {
         var layer = new Layer(layerCounter, fmp, ppp, this::removeLayer, this::setVisible);
         layerCounter++;
 
-        layers.add(layer);
+        layers.add(0, layer);
 
+        /*
         var previewChildren = previewWindow.getChildren();
-        var previewChildrenList = new LinkedList<Node>(previewChildren);
+        var previewChildrenList = new LinkedList<>(previewChildren);
         previewChildrenList.addFirst(layer.getPreviewRegion());
         previewChildren.setAll(previewChildrenList);
 
-        var optionsChildren = optionsWindow.getChildren();
-        var optionsChildrenList = new LinkedList<Node>(optionsChildren);
-        optionsChildrenList.addFirst(layer.getPreviewRegion());
+
+         */
+        previewWindow.getChildren().add(layer.getPreviewRegion());
+
+        var optionsChildren = layersWindow.getChildren();
+        var optionsChildrenList = new LinkedList<>(optionsChildren);
+        optionsChildrenList.addFirst(layer.getControlPane());
         optionsChildren.setAll(optionsChildrenList);
     }
 
@@ -140,7 +146,7 @@ public class Main extends Application {
 
     private void removeLayer(Layer layer) {
         var previewDeleted = previewWindow.getChildren().remove(layer.getPreviewRegion());
-        var controlDeleted = optionsWindow.getChildren().remove(layer.getControlPane());
+        var controlDeleted = layersWindow.getChildren().remove(layer.getControlPane());
         var layerDeleted = layers.remove(layer);
 
         assert previewDeleted;
