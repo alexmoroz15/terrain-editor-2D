@@ -2,6 +2,7 @@ package terrain_editor;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -13,7 +14,11 @@ import terrain_editor.layer.Layer;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class Main extends Application {
     private ArrayList<Layer> layers;
@@ -145,4 +150,46 @@ public class Main extends Application {
     private void setVisible(Layer layer, boolean visible) {
         layer.getPreviewRegion().setVisible(visible);
     }
+
+    public enum MoveLayerDirection {
+        UP,
+        DOWN
+    }
+
+    public interface MoveLayerCallback {
+        void move(Layer layer, MoveLayerDirection direction);
+    }
+
+    private void moveLayerUp(Layer layer, MoveLayerDirection direction) {
+        // I don't know how to do stream-fu, so I'll cheat by using arrays.
+        var regionList = previewWindow.getChildren();
+        var regionArray = regionList.toArray();
+        regionList.clear();
+
+        int lbound = 0;
+        int hbound = regionArray.length;
+        switch (direction) {
+            case UP:
+                hbound--;
+                break;
+            case DOWN:
+                lbound++;
+                break;
+        }
+
+        for (int i = lbound; i < hbound; i++) {
+            if (regionArray[i] == layer.getPreviewRegion()) {
+                var temp = regionArray[i];
+                regionArray[i] = regionArray[i + 1];
+                regionArray[i + 1] = temp;
+
+                regionList.addAll((Node[]) regionArray);
+                assert true;
+            }
+        }
+        regionList.addAll((Node[]) regionArray);
+        assert false;
+    }
+
+
 }
