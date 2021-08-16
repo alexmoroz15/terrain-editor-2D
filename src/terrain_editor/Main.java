@@ -1,6 +1,7 @@
 package terrain_editor;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -122,7 +123,7 @@ public class Main extends Application {
         var layer = new Layer(layerCounter, fmp, ppp, this::removeLayer, this::setVisible);
         layerCounter++;
 
-        layers.add(0, layer);
+        layers.add(layer);
 
         /*
         var previewChildren = previewWindow.getChildren();
@@ -167,75 +168,81 @@ public class Main extends Application {
         DOWN
     }
 
-    public interface MoveLayerCallback {
-        void move(Layer layer, MoveLayerDirection direction);
-    }
-
-    private boolean canMoveLayer(Layer layer, MoveLayerDirection direction) {
-        var regionList = previewWindow.getChildren();
-        var regionArray = regionList.toArray();
-        switch (direction) {
-            case UP:
-                for (int i = 0; i < regionArray.length - 1; i++) {
-                    if (regionArray[i] == layer.getPreviewRegion()) {
-                        return true;
-                    }
-                }
-                break;
-            case DOWN:
-                for (int i = 1; i < regionArray.length; i++) {
-                    if (regionArray[i] == layer.getPreviewRegion()) {
-                        return true;
-                    }
-                }
-                break;
-        }
-        return false;
-    }
-
     // Return true if the layer can still move up/down
     private boolean moveLayer(Layer layer, MoveLayerDirection direction) {
-        // I don't know how to do stream-fu, so I'll cheat by using arrays.
-        var regionList = previewWindow.getChildren();
-        var regionArray = regionList.toArray();
-        //regionList.clear();
+        // So the layer needs to be moved in 3 places:
+        // - previewWindow (ObservableList<Node>)
+        // - layersWindow (ObservableList<Node>)
+        // - layers (ArrayList<Layer>)
 
-        int lbound = 0;
-        int hbound = regionArray.length;
-        int swapOffset = 0;
-
-        switch(direction) {
+        LinearMoveDirection previewDirection = LinearMoveDirection.FORWARD;
+        LinearMoveDirection optionsDirection = LinearMoveDirection.BACKWARD;
+        switch (direction) {
             case UP:
-                hbound--;
-                swapOffset = 1;
+                previewDirection = LinearMoveDirection.FORWARD;
+                optionsDirection = LinearMoveDirection.BACKWARD;
                 break;
             case DOWN:
-                lbound++;
-                swapOffset = -1;
+                previewDirection = LinearMoveDirection.BACKWARD;
+                optionsDirection = LinearMoveDirection.FORWARD;
                 break;
         }
+        var result = false;
 
-        for (int i = lbound; i < hbound; i++) {
-            if (regionArray[i] == layer.getPreviewRegion()) {
-                var temp = regionArray[i];
-                regionArray[i] = regionArray[i + swapOffset];
-                regionArray[i + swapOffset] = temp;
-
-                regionList.setAll((Node[]) regionArray);
-                return canMoveLayer(regionArray, i + swapOffset, direction);
-            }
+        var previewWindowArray = previewWindow.getChildren().toArray();
+        result = arraySwap(previewWindowArray, layer.getPreviewRegion(), previewDirection);
+        if (!result) {
+            return false;
         }
+        previewWindow.getChildren().setAll((Node[]) previewWindowArray);
 
-        assert false;
-        return false;
+        // There's gotta be a better and more efficient way to do this, but screw it.
+        var layersArray = layers.toArray();
+        result = arraySwap(layersArray, layer, previewDirection);
+        if (!result) {
+            return false;
+        }
+        layers.clear();
+        layers.addAll(Arrays.asList((Layer[]) layersArray));
+
+        var layersWindowArray = layersWindow.getChildren().toArray();
+        result = arraySwap(layersWindowArray, layer.getControlPane(), optionsDirection);
+        if (!result) {
+            return false;
+        }
+        layersWindow.getChildren().setAll((Node[]) layersWindowArray);
+        return true;
     }
 
-    private boolean canMoveLayer(Object[] array, int index, MoveLayerDirection direction) {
-        switch(direction) {
-            case UP:
-                return index > 1;
-            case DOWN:
-                return index < array.length - 1;
+    private enum LinearMoveDirection {
+        FORWARD,
+        BACKWARD
+    }
+
+    private boolean arraySwap(Object[] a, Object o, LinearMoveDirection direction) {
+        if (a.length <= 1) {
+            return false;
+        }
+        if ((a[0] == o && direction == LinearMoveDirection.BACKWARD) ||
+                (a[a.length - 1] == o && direction == LinearMoveDirection.FORWARD)) {
+            return false;
+        }
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == o) {
+                int swapOffset = 0;
+                switch (direction) {
+                    case FORWARD:
+                        swapOffset = 1;
+                        break;
+                    case BACKWARD:
+                        swapOffset = -1;
+                        break;
+                }
+                var temp = a[i];
+                a[i] = a[i + swapOffset];
+                a[i + swapOffset] = temp;
+                return true;
+            }
         }
         return false;
     }
