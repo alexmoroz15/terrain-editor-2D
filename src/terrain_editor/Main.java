@@ -187,17 +187,17 @@ public class Main extends Application {
                 optionsDirection = LinearMoveDirection.FORWARD;
         }
 
-        var previewWindowArray = previewWindow.getChildren().toArray();
+        var previewWindowArray = previewWindow.getChildren().toArray(new Node[0]);
         var result1 = arraySwap(previewWindowArray, layer.getPreviewRegion(), previewDirection);
-        previewWindow.getChildren().setAll((Node[]) previewWindowArray);
+        previewWindow.getChildren().setAll(previewWindowArray);
 
         // There's gotta be a better and more efficient way to do this, but screw it.
-        var layersArray = layers.toArray();
+        var layersArray = layers.toArray(new Layer[0]);
         var result2 = arraySwap(layersArray, layer, previewDirection);
         layers.clear();
         layers.addAll(Arrays.asList((Layer[]) layersArray));
 
-        var layersWindowArray = layersWindow.getChildren().toArray();
+        var layersWindowArray = layersWindow.getChildren().toArray(new Node[0]);
         var result3 = arraySwap(layersWindowArray, layer.getControlPane(), optionsDirection);
         layersWindow.getChildren().setAll((Node[]) layersWindowArray);
 
@@ -232,7 +232,13 @@ public class Main extends Application {
                 var temp = a[i];
                 a[i] = a[i + swapOffset];
                 a[i + swapOffset] = temp;
-                return true;
+                switch (direction) {
+                    case FORWARD:
+                        return i + swapOffset < a.length - 1;
+                    case BACKWARD:
+                        return i + swapOffset > 0;
+                }
+                return false;
             }
         }
         return false;
