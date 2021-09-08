@@ -1,0 +1,31 @@
+- Improve User Interface
+	- Improve TextField
+		- Add increment/decrement buttons
+		- Add sliders
+		- Add option to toggle between sliders and text fields
+		- Add option to toggle between logarithic scale and linear scale
+		- Remove scientific notation (it's not intuitive for me)
+
+- Improve User Experience
+	- Intuitive mouse control
+		- Scroll wheel to increase/decrease frequency
+		- Drag to change x/y offset
+		- Click layer in Control to select it
+			- Highlighted in blue
+		- Scroll wheel over number fields to increment/decrement them
+
++ Add ability to remove layers
+- Add ability to rename layers
++ Add ability to rearrange layers
++ Add ability to toggle layer visibility
+- Add ability to add effects to layers
+	- Transparency
+	- Amplitude-based shaders (tinting)
+
+- Add ability to switch between Value noise and Perlin noise
+
+- Add ability to show X% of tiles with Y% offset from bottom
+
+- Add option to normalize amplitudes globally (divide by 256) or normalize locally
+
+- Add ability to export/import project (array of layers)

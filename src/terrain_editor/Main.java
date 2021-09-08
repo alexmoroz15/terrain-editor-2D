@@ -62,6 +62,8 @@ public class Main extends Application {
 
     private Parent CreateRightRegion() {
         var rightRegion = new ScrollPane();
+        rightRegion.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        rightRegion.setFitToWidth(true);
         //var options = new VBox();
         var settings = new VBox();
         layersWindow = new VBox();
@@ -98,6 +100,11 @@ public class Main extends Application {
 
         settings.getChildren().addAll(saveButton, addLayerButton, layersWindow);
 
+
+        var label = new Label("Hello World!");
+        var titledPane = new TitledPane("My titled pane", label);
+        layersWindow.getChildren().add(titledPane);
+
         return rightRegion;
     }
 
@@ -110,6 +117,15 @@ public class Main extends Application {
         var root = new BorderPane();
         root.setCenter(leftRegion);
         root.setRight(rightRegion);
+
+        final Menu menu1 = new Menu("File");
+        final Menu menu2 = new Menu("Options");
+        final Menu menu3 = new Menu("Help");
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().addAll(menu1, menu2, menu3);
+
+        root.setTop(menuBar);
 
         addLayer();
 
