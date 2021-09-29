@@ -1,12 +1,15 @@
 package terrain_editor_exp;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -67,13 +70,64 @@ public class Main extends Application {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         var layersHolder = new VBox();
 
-        var mainControls = new HBox(new Label("Layer 1"));
-        var layerOptions = new TitledPane("Layer Options", new Label("Hello World"));
-        var patterns = new TitledPane("Patterns", new Label("Hello World!"));
-        var layerExample = new VBox(mainControls, layerOptions, patterns);
+        var upButton = new Button("up");
+        var downButton = new Button("down");
+        var layerHeightControls = new VBox(upButton, downButton);
 
-        layersHolder.getChildren().addAll(layerExample);
+        var visibilityButton = new Button("toggle visible");
+
+        var layerPreview = new ImageView("/images/swamp_ground.png");
+
+        var layerName = new Label("Layer 1");
+
+        var duplicateLayer = new Button("duplicate");
+        var deleteLayer = new Button("delete");
+        var layerControls = new HBox(layerHeightControls,
+                visibilityButton,
+                layerPreview,
+                layerName,
+                duplicateLayer,
+                deleteLayer);
+
+        layerControls.setAlignment(Pos.CENTER);
+        var layerOptions = CreateLayerOptions();
+
+        var patterns = new TitledPane("Patterns", new Label("Hello World!"));
+        var layerExample = new VBox(layerControls, layerOptions, patterns);
+        layerExample.setBorder(new Border(new BorderStroke(
+                Color.BLACK,
+                BorderStrokeStyle.SOLID,
+                null,
+                null
+        )));
+
+        layersHolder.getChildren().addAll(layerExample, new Button("Add Layer"));
+        layersHolder.setAlignment(Pos.TOP_CENTER);
         scrollPane.setContent(layersHolder);
         return scrollPane;
+    }
+
+    private Node CreateLayerOptions() {
+        // TODO: Create Label-Input combo structs
+        var numRowsLabel = new Label("Rows");
+        var numRowsField = new TextField();
+        var numRowsHolder = new HBox(numRowsLabel, numRowsField);
+        var numColsLabel = new Label("Columns");
+        var numColsField = new TextField();
+        var numColsHolder = new HBox(numColsLabel, numColsField);
+        var gridPropsHolder = new VBox(numRowsHolder, numColsHolder);
+
+        var posXLabel = new Label("PosX");
+        var posYLabel = new Label("PosY");
+        var scaleXLabel = new Label("ScaleX");
+        var scaleYLabel = new Label("ScaleY");
+
+
+        var layerOptions = new VBox(gridPropsHolder,
+                posXLabel,
+                posYLabel,
+                scaleXLabel,
+                scaleYLabel);
+        return new TitledPane("Layer Options", layerOptions);
     }
 }
